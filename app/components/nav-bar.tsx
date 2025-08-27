@@ -1,8 +1,44 @@
+"use client";
+import { memo, useCallback } from "react";
 import { ModeToggle } from "@/app/dark-mode";
 import { Button } from "@/components/ui/button";
-// @ts-ignore
-//import { Coin } from "lucide-react";
-import { ShoppingCart } from "lucide-react"
+import { ShoppingCart, LogOut } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+
+const AuthButton = memo(() => {
+  const { data: session, status } = useSession();
+  
+  const handleSignOut = useCallback(() => {
+    signOut({ callbackUrl: '/auth/signin' });
+  }, []);
+
+  if (status === 'loading') {
+    return <div className="w-24 h-9 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />;
+  }
+
+  if (session) {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="text-sm hidden sm:inline">Hi, {session.user?.name}</span>
+        <Button 
+          onClick={handleSignOut}
+          variant="outline" 
+          size="sm"
+          className="flex items-center gap-1"
+        >
+          <LogOut className="w-4 h-4" />
+          <span className="hidden sm:inline">Sign Out</span>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Button asChild className="whitespace-nowrap h-11 px-3">
+      <a href="/auth/signup">Get Started</a>
+    </Button>
+  );
+});
 
 export default function Navbar() {
   function AppLogo() {
@@ -26,16 +62,19 @@ export default function Navbar() {
     <div className=" p-3 flex m-5 mx-8 items-center justify-between flex-wrap">
       <AppLogo />
       <div className="flex gap-4 items-center flex-wrap justify-center md:justify-start">
-        <a href="#" className="hover:underline">
+        <a href="/" className="hover:underline">
           Home
         </a>
-        <a href="#" className="hover:underline">
-          About
+        <a href="/auth/signin" className="hover:underline">
+          Sign In
+        </a>
+        <a href="/auth/signup" className="hover:underline">
+          Sign Up
         </a>
       </div>
       <div className="flex gap-4 items-center flex-wrap justify-end">
         <ModeToggle />
-        <Button className="whitespace-nowrap h-11 px-3">Get Started</Button>
+        <AuthButton />
       </div>
     </div>
   );
