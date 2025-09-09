@@ -20,18 +20,31 @@ export default function SignIn() {
     const password = formData.get('password') as string;
 
     startTransition(async () => {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
+      // const result = await signIn('credentials', {
+      //   email,
+      //   password,
+      //   redirect: false,
+      // });
 
-      if (result?.error) {
-        toast.error('Invalid credentials');
-      } else if (result?.ok) {
-        toast.success('Signed in successfully');
-        window.location.href = '/';
-      }
+      // if (result?.error) {
+      //   toast.error('Invalid credentials');
+      // } else if (result?.ok) {
+      //   toast.success('Signed in successfully');
+      //   window.location.href = '/';
+      // }
+      const result = await signIn("credentials", {
+  email,
+  password,
+  redirect: true,
+  callbackUrl: "/",   // ✅ important, otherwise result.url is undefined
+});
+
+if (result?.error) {
+  toast.error("Invalid credentials");
+} else if (result?.ok && result?.url) {
+  toast.success("Signed in successfully");
+  router.push('/');  // ✅ use router.push instead of window.location.href
+}
     });
   }, []);
 
@@ -72,3 +85,5 @@ export default function SignIn() {
     </div>
   );
 }
+
+

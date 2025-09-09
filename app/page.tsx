@@ -17,6 +17,8 @@ export default function Home() {
     }
   }, [session, status, router]);
 
+
+
   if (status === "loading") {
     return <Loading />;
   }

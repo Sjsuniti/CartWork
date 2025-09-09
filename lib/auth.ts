@@ -50,13 +50,67 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/auth/signin',
     signUp: '/auth/signup',
   },
-  callbacks: {
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
-      if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
-    },
+
+
+
+//   callbacks: {
+//   async jwt({ token, user }) {
+//     // When user first signs in, attach user data to the token
+//     if (user) {
+//       token.id = user.id;
+//       token.name = user.name;
+//       token.email = user.email;
+//     }
+//     return token;
+//   },
+//   async session({ session, token }) {
+//     // Make the token values available in the client session
+//     if (token) {
+//       session.user.id = token.id as string;
+//       session.user.name = token.name as string;
+//       session.user.email = token.email as string;
+//     }
+//     return session;
+//   },
+//   async redirect({ url, baseUrl }) {
+//     if (url.startsWith('/')) return `${baseUrl}${url}`;
+//     if (new URL(url).origin === baseUrl) return url;
+//     return baseUrl;
+//   }
+// },
+
+callbacks: {
+  async jwt({ token, user }) {
+    if (user) {
+      token.id = user.id;
+      token.name = user.name;
+      token.email = user.email;
+    }
+    return token;
   },
+  async session({ session, token }) {
+    if (token) {
+      session.user.id = token.id as string;
+      session.user.name = token.name as string;
+      session.user.email = token.email as string;
+    }
+    return session;
+  },
+  async redirect({ url, baseUrl }) {
+    // ✅ Always go to dashboard after sign in
+    if (url.includes("/auth/signin")) {
+      return `${baseUrl}/dashboard`;
+    }
+    if (url.startsWith("/")) return `${baseUrl}${url}`;
+    if (new URL(url).origin === baseUrl) return url;
+    return baseUrl;
+  },
+},
+
+
   session: { strategy: 'jwt' },
   debug: true,
 });
+
+
+

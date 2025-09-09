@@ -5,6 +5,7 @@ import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
 
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
@@ -18,10 +19,12 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
+   
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -52,3 +55,7 @@ export default function RootLayout({
     </html>
   );
 }
+
+
+
+

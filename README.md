@@ -1,5 +1,7 @@
 # EcommDash - E-commerce Dashboard
 
+
+
 A modern, full-stack e-commerce dashboard built with Next.js 15, featuring authentication, data visualization, and comprehensive admin functionality.
 
 ## Features
