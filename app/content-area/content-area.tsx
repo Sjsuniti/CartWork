@@ -62,7 +62,7 @@ export default function ContentArea() {
           onChange: handleSearchChange,
         }}
         username="Admin"
-        avatarFallback={"sj"} 
+       
         iconButtons={[
           <ModeToggle key={"modetoggle"} />,
           <span
